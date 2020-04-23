@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node -r dotenv/config server.js",
-    "server": "nodemon -r dotenv/config server.js"
+    "server": "nodemon -r dotenv/config server.js",
+    "heroku-postbuild": "npm install --production && knex migrate:latest && knex seed:run"
   },
   "repository": {
     "type": "git",
