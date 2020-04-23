@@ -27,26 +27,29 @@ const generateToken = (user) => {
 };
 
 users.post("/register", hashpass, async (req, res) => {
+    // First lets make sure there isn't already a user by that name
     const checkUserExists = await db("users")
         .where({ username:req.body.username })
         .first();
+
     if(checkUserExists) {
-        return res.status(401).json({ message: `User ${req.body.username} already exists.` })
+        return res.status(401).json({ message: `User ${req.body.username} already exists.` });
     };
     
     try {
         db("users")
             .insert(req.body)
-            .then(userObject => {
-                return res.status(200).json({ 
-                    command: userObject.command, 
-                    message:`User '${req.body.username}' added.`,
-                    password: req.body.password
+            .then(userid => {
+                const token = generateToken({ username: req.body.username, admin: 0, id: userid }); 
+                res.status(200).json({ 
+                    message: `User id ${userid} created.`, 
+                    token
                 })
             })
             .catch(error => {
-                return res.status(500).json({ error })
+                return res.status(500).json({ error });
             })
+
     } catch (error) {
         const message = errorObject[error.errno] || errorBackup;
         res.status(500).json({ message, error });
