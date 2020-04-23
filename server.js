@@ -4,7 +4,7 @@ const cors = require("cors");
 
 const users = require("./api/users.js");
 const server = express(); // creates the server
-const envPort = process.env.PORT || 3131; 
+const envPort = process.env.PORT;
 
 server.use(helmet());
 server.use(express.json());
