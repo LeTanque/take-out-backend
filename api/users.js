@@ -40,7 +40,7 @@ users.post("/register", hashpass, async (req, res) => {
         db("users")
             .insert(req.body)
             .then(userid => {
-                const token = generateToken({ username: req.body.username, admin: 0, id: userid }); 
+                const token = generateToken({ username: req.body.username, admin: false, id: userid }); 
                 res.status(200).json({ 
                     message: `User id ${userid} created.`, 
                     token
